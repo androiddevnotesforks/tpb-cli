@@ -7,7 +7,6 @@ import com.theapache64.tpbcli.utils.InputUtils
 import com.theapache64.tpbcli.utils.SimpleCommandExecutor
 import com.theapache64.tpbcli.utils.color
 
-
 private const val IS_DEBUG = false
 private const val OPTION_GET_MAGNET = 1
 private const val OPTION_OPEN_LINK = 2
@@ -18,7 +17,7 @@ fun main(args: Array<String>) {
     val keyword = if (IS_DEBUG) {
         "Iron man"
     } else {
-        InputUtils.getString("Search", true)
+        InputUtils.getString("Enter keyword", true)
     }
 
     println("🔍 Searching for `$keyword`")
