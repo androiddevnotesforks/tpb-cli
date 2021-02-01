@@ -12,19 +12,23 @@ object TPB {
     private val PROXY_REGEX =
         "<span class=\"domain\" style=\"margin-right: 4px;\">(?<domain>.+)</span>".toRegex()
     private val FILE_REGEX =
-        "<div class=\"detName\"> <a href=\"(?<link>.+?)\" class=\"detLink\" (?:.+?)>(?<fileName>.+?)<\\/a><\\/div>.+?Uploaded\\s(?<date>.+?), Size (?<size>.+?),.+?\"right\">(?<seederCount>\\d+).+?\"right\">(?<leecherCount>\\d+)".toRegex()
+        "<div class=\"detName\"> <a href=\"(?<link>.+?)\" class=\"detLink\" (?:.+?)>(?<fileName>.+?)<\\/a>[\\s\\S]*<\\/div>[\\s\\S]+?Uploaded\\s(?<date>.+?), Size (?<size>.+?),.+?\"right\">(?<seederCount>\\d+).+?\"right\">(?<leecherCount>\\d+)".toRegex()
 
     private val MAGNET_REGEX = "href=\"(?<magnetUrl>magnet:.+?)\" title=\"Get this torrent".toRegex()
 
     fun getFiles(keyword: String): List<File> {
         println("➡️ Getting best proxy...")
-        val baseDomain = getProxies().first()
-        val encKeyword = URLEncoder.encode(keyword, "UTF-8")
+        val baseDomain = "thepiratebay10.org"
+        val encKeyword = URLEncoder.encode(keyword, "UTF-8").replace(
+            "+", "%20"
+        )
         val baseUrl = "https://$baseDomain"
-        val searchUrl = "$baseUrl/s/?q=$encKeyword&page=0&orderby=99"
-        println("🔍 Searching `$keyword`...")
+        //val searchUrl = "$baseUrl/s/?q=$encKeyword&page=0&orderby=99"
+        val searchUrl = "$baseUrl/search/$encKeyword/1/99/0"
+        println("🔍 Searching `$keyword`... -> $searchUrl")
         val respString = RestClient.get(searchUrl).body!!.string()
         val response = StringUtils.removeNewLinesAndMultipleSpaces(respString)
+        // java.io.File("x.txt").writeText(response)
         val results = FILE_REGEX.findAll(response)
         val files = mutableListOf<File>()
         for ((index, result) in results.withIndex()) {
@@ -33,11 +37,11 @@ object TPB {
                 File(
                     index + 1,
                     groups["fileName"]!!.value,
-                    groups["date"]!!.value,
-                    groups["size"]!!.value,
+                    groups["date"]!!.value.nbspToSpace(),
+                    groups["size"]!!.value.nbspToSpace(),
                     groups["seederCount"]!!.value.toInt(),
                     groups["leecherCount"]!!.value.toInt(),
-                    "$baseUrl${groups["link"]!!.value}"
+                    groups["link"]!!.value
                 )
             )
         }
@@ -67,4 +71,8 @@ object TPB {
     }
 
 
+}
+
+private fun String.nbspToSpace(): String {
+    return this.replace("&nbsp;", " ")
 }
