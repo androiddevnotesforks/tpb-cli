@@ -15,9 +15,13 @@ fun main(args: Array<String>) {
 
     @Suppress("ConstantConditionIf")
     val keyword = if (IS_DEBUG) {
-        "Iron man"
+        "Assassin"
     } else {
-        InputUtils.getString("Enter keyword", true)
+        if (args.isEmpty()) {
+            InputUtils.getString("Enter keyword", true)
+        } else {
+            args.first()
+        }
     }
 
     println("🔍 Searching for `$keyword`")

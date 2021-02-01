@@ -12,7 +12,7 @@ object TPB {
     private val PROXY_REGEX =
         "<span class=\"domain\" style=\"margin-right: 4px;\">(?<domain>.+)</span>".toRegex()
     private val FILE_REGEX =
-        "<div class=\"detName\"> <a href=\"(?<link>.+?)\" class=\"detLink\" (?:.+?)>(?<fileName>.+?)<\\/a>[\\s\\S]*<\\/div>[\\s\\S]+?Uploaded\\s(?<date>.+?), Size (?<size>.+?),.+?\"right\">(?<seederCount>\\d+).+?\"right\">(?<leecherCount>\\d+)".toRegex()
+        "<div class=\"detName\"> <a href=\"(?<link>.+?)\" class=\"detLink\" (?:.+?)>(?<fileName>.+?)<\\/a>[\\s\\S]*?<\\/div>[\\s\\S]+?Uploaded\\s(?<date>.+?), Size (?<size>.+?),.+?\"right\">(?<seederCount>\\d+).+?\"right\">(?<leecherCount>\\d+)".toRegex()
 
     private val MAGNET_REGEX = "href=\"(?<magnetUrl>magnet:.+?)\" title=\"Get this torrent".toRegex()
 
@@ -28,7 +28,7 @@ object TPB {
         println("🔍 Searching `$keyword`... -> $searchUrl")
         val respString = RestClient.get(searchUrl).body!!.string()
         val response = StringUtils.removeNewLinesAndMultipleSpaces(respString)
-        // java.io.File("x.txt").writeText(response)
+        java.io.File("x.txt").writeText(response)
         val results = FILE_REGEX.findAll(response)
         val files = mutableListOf<File>()
         for ((index, result) in results.withIndex()) {
