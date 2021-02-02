@@ -6,6 +6,9 @@ import com.theapache64.tpbcli.utils.GREEN
 import com.theapache64.tpbcli.utils.InputUtils
 import com.theapache64.tpbcli.utils.SimpleCommandExecutor
 import com.theapache64.tpbcli.utils.color
+import java.awt.Toolkit
+import java.awt.datatransfer.StringSelection
+
 
 private const val IS_DEBUG = false
 private const val OPTION_GET_MAGNET = 1
@@ -104,6 +107,11 @@ fun askOption(file: File) {
             println("-------------------------------------------------------------")
             println(magnetLink.color(GREEN))
             println("-------------------------------------------------------------")
+            val selection = StringSelection(magnetLink)
+            Toolkit.getDefaultToolkit().systemClipboard.setContents(selection, selection)
+            println("📋️ Copied to your clipboard...")
+            System.`in`.read()
+            println("🗑️️ Clipboard cleared")
         }
 
         OPTION_OPEN_LINK -> {
