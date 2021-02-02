@@ -27,7 +27,7 @@ fun main(args: Array<String>) {
     println("🔍 Searching for `$keyword`")
 
     val files = TPB.getFiles(keyword)
-        .take(10) // take top 5 only
+        .take(10) // take top 10 only
 
     if (files.isNotEmpty()) {
 
