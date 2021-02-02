@@ -15,7 +15,8 @@ for the stupid ads. 😠
 
 ## Install
 
-(coming soon) 😃
+- Download latest `JAR` from releases
+- Run `java -jar tpb-cli.main.jar`
 
 ## Usage
 
