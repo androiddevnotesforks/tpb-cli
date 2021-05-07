@@ -6,13 +6,16 @@ import com.theapache64.tpbcli.utils.GREEN
 import com.theapache64.tpbcli.utils.InputUtils
 import com.theapache64.tpbcli.utils.SimpleCommandExecutor
 import com.theapache64.tpbcli.utils.color
+import java.awt.Desktop
 import java.awt.Toolkit
 import java.awt.datatransfer.StringSelection
+import java.net.URI
 
 
 private const val IS_DEBUG = false
 private const val OPTION_GET_MAGNET = 1
 private const val OPTION_OPEN_LINK = 2
+private const val OPTION_OPEN_TORRENT_PROGRAM = 3
 
 fun main(args: Array<String>) {
 
@@ -98,8 +101,9 @@ fun askOption(file: File) {
     println(table)
     println("${OPTION_GET_MAGNET}) 🔻 Get Magnet")
     println("${OPTION_OPEN_LINK}) 👁️️ Open Link")
+    println("${OPTION_OPEN_TORRENT_PROGRAM}) 💻 Open Torrent Program")
 
-    when (InputUtils.getInt("Option", OPTION_GET_MAGNET, OPTION_OPEN_LINK)) {
+    when (InputUtils.getInt("Option", OPTION_GET_MAGNET, OPTION_OPEN_TORRENT_PROGRAM)) {
 
         OPTION_GET_MAGNET -> {
             val magnetLink = TPB.getMagnet(file.link)
@@ -116,6 +120,11 @@ fun askOption(file: File) {
 
         OPTION_OPEN_LINK -> {
             SimpleCommandExecutor.executeCommand("sensible-browser \"${file.link}\"")
+        }
+
+        OPTION_OPEN_TORRENT_PROGRAM -> {
+            val magnetLink = TPB.getMagnet(file.link)
+            Desktop.getDesktop().browse(URI(magnetLink))
         }
     }
 }
